@@ -61,7 +61,7 @@ services:
       - key: MONGO_INITDB_ROOT_USERNAME
         value: sorry-cypress
       - key: MONGODB_URI
-        value: mongodb://sorry-cypress:sleeping-marshmallow-boat-holder@mongo-pvge:27017
+        value: mongodb://sorry-cypress:sleeping-marshmallow-boat-holder@<replace-with-pserv-address>:27017
     disk:
       name: data
       mountPath: /data/db
