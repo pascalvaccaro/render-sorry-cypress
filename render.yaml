@@ -1,0 +1,68 @@
+services:
+  - type: web
+    name: director
+    env: docker
+    healthCheckPath: /
+    dockerfilePath: ./Dockerfile.director
+    envVars:
+      - key: DASHBOARD_URL
+        fromService:
+          name: dashboard
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: EXECUTION_DRIVER
+        value: ../execution/mongo/driver
+      - key: SCREENSHOTS_DRIVER
+        value: ../screenshots/s3.driver
+      - key: MONGODB_DATABASE
+        value: sorry-cypress
+      - key: MONGODB_URI
+        fromService:
+          name: mongo
+          type: pserv
+          envVarKey: MONGODB_URI
+
+  - type: web
+    name: dashboard
+    env: docker
+    healthCheckPath: /
+    dockerfilePath: ./Dockerfile.dashboard
+    envVars:
+      - key: GRAPHQL_SCHEMA_URL
+        fromService:
+          name: api
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: PORT
+        value: 8080
+      - key: CI_URL
+        value: ""
+
+  - type: web
+    name: api
+    env: docker
+    dockerfilePath: ./Dockerfile.api
+    envVars:
+      - key: MONGODB_URI
+        fromService:
+          name: mongo
+          type: pserv
+          envVarKey: MONGODB_URI
+      - key: MONGODB_DATABASE
+        value: sorry-cypress
+
+  - type: pserv
+    name: mongo
+    env: docker
+    dockerfilePath: ./Dockerfile.mongo
+    envVars:
+      - key: MONGO_INITDB_ROOT_PASSWORD
+        value: sleeping-marshmallow-boat-holder
+      - key: MONGO_INITDB_ROOT_USERNAME
+        value: sorry-cypress
+      - key: MONGODB_URI
+        value: mongodb://sorry-cypress:sleeping-marshmallow-boat-holder@mongo-pvge:27017
+    disk:
+      name: data
+      mountPath: /data/db
+      sizeGB: 1
