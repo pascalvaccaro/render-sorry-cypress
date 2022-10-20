@@ -1,6 +1,6 @@
 services:
-  - type: web
-    name: director
+  - name: director
+    type: web
     env: docker
     healthCheckPath: /
     dockerfilePath: ./Dockerfile.director
@@ -22,8 +22,8 @@ services:
           type: pserv
           envVarKey: MONGODB_URI
 
-  - type: web
-    name: dashboard
+  - name: dashboard
+    type: web
     env: docker
     healthCheckPath: /
     dockerfilePath: ./Dockerfile.dashboard
@@ -38,8 +38,8 @@ services:
       - key: CI_URL
         value: ""
 
-  - type: web
-    name: api
+  - name: api
+    type: web
     env: docker
     dockerfilePath: ./Dockerfile.api
     envVars:
@@ -51,8 +51,8 @@ services:
       - key: MONGODB_DATABASE
         value: sorry-cypress
 
-  - type: pserv
-    name: mongo
+  - name: mongo
+    type: pserv
     env: docker
     dockerfilePath: ./Dockerfile.mongo
     envVars:
